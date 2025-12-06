@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const todoRoute = require('./routes/route.todos');
 
+require('./config/db'); // DB Config
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
