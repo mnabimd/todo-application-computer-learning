@@ -1,0 +1,40 @@
+
+Lecture 1: 
+Introudction to Express (Library), 
+CRUD Operations, 
+Express GET, POST, DELETE, PUT requests
+Cors Introduction (Library)
+Body-Parser Introduction (Library)
+Postman Introduction - Postman Collections
+_____
+
+
+~~~~~~~Current~~~~~Lecture 2 / Commmit 2: 
+Middleware Functions
+Global Error Throwing and Handling
+Custom error throwing and handling
+Organizing Project Struture
+    1. Routes
+            Purpose: Define what URL the client can call and which controller should run.
+            
+            Think of it as: The API endpoints — just the “address”.
+    2. Controllers
+            Purpose: The logic behind each route.
+            They process the request, call services/DB, and return a response.  
+            
+            Think of it as: The “main logic” for each endpoint.
+    3. Middlewares
+            Purpose: Functions that run before the controller.
+            Used for auth, validation, logging, etc.
+    4. Utils
+            Purpose: Reusable helper functions that are NOT specific to routes/controllers.
+            Utility functions to keep logic clean.
+
+T           hink of it as: Tools — anything that helps the project but is not tied to Express directly.
+_______
+
+Lecture 3:
+Connection to databases (MongoDB, MySQL) (Sequelize)
+Raw Queries, ORM Brief Introduction
+Database Setup
+CRUD Operations with Database
