@@ -7,13 +7,14 @@ const {
    deleteTodoById,
    createTodo
 } = require('../controllers/controller.todos');
+const { checkIfRoleIsAdmin } = require('../middlewares/checkIfRoleIsAdmin');
 
 const router = express.Router();
 
 // ✅ CREATE
 router.post('/', createTodo);
 
-router.get('/', checkAuth, sendTodos);
+router.get('/', checkAuth, checkIfRoleIsAdmin, sendTodos);
 
 // 📖 READ (single todo)
 router.get('/:id', getTodoById);

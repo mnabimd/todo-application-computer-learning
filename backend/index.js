@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const todoRoute = require('./routes/route.todos');
+const usersRoute = require('./routes/route.users');
 
 require('./config/db'); // DB Config
 
@@ -11,6 +13,7 @@ app.use(bodyParser.json());
 
 // use todo route
 app.use('/api/todos', todoRoute);
+app.use('/api/users', usersRoute);
 
 // Start Server
 const PORT = 5000;
