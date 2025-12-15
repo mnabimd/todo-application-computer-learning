@@ -9,16 +9,20 @@ const router = express.Router();
 router.post('/', async (req, res) => {
    //   Collect data from user
    // register user
-   const { email, password } = req.body;
+   const { email, password, name } = req.body;
 
    if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
    }
 
+   if (!name || name.trim().length === 0) {
+      return res.status(400).json({ message: 'Name is required' });
+   }
+
    const hash = await bcrypt.hash(password, 12);
 
-   await sequelize.query('INSERT INTO users (email, password_hash) VALUES (?, ?)', {
-      replacements: [email, hash]
+   await sequelize.query('INSERT INTO users (email, password_hash, name) VALUES (?, ?, ?)', {
+      replacements: [email, hash, name]
    });
 
    res.status(201).send({ message: 'User registered successfully' });
@@ -48,7 +52,15 @@ router.post('/login', async (req, res) => {
       expiresIn: '15m'
    });
 
-   res.json({ token });
+   // Return user info along with token
+   res.json({ 
+      token,
+      user: {
+         id: user.id,
+         email: user.email,
+         name: user.name
+      }
+   });
 });
 
 module.exports = router;

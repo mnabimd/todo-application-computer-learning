@@ -6,6 +6,7 @@ export default function Auth({ onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +20,7 @@ export default function Auth({ onAuthSuccess }) {
         await authAPI.login(email, password);
         onAuthSuccess();
       } else {
-        await authAPI.register(email, password);
+        await authAPI.register(email, password, name);
         // After registration, auto-login
         await authAPI.login(email, password);
         onAuthSuccess();
@@ -50,6 +51,23 @@ export default function Auth({ onAuthSuccess }) {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
+          {!isLogin && (
+            <div className="form-group">
+              <label htmlFor="name" className="form-label">
+                Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                className="form-input"
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="email" className="form-label">
               Email Address

@@ -9,8 +9,12 @@ export default function TodoList({ onLogout }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all'); // all, active, completed
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    // Get current user info
+    const user = authAPI.getCurrentUser();
+    setCurrentUser(user);
     loadTodos();
   }, []);
 
@@ -86,11 +90,19 @@ export default function TodoList({ onLogout }) {
               <h1 className="header-title">
                 <span className="text-gradient">Todo</span>App
               </h1>
-              <p className="header-subtitle">Organize your life, one task at a time</p>
+              <p className="header-subtitle">
+                {currentUser ? `Welcome back, ${currentUser.name}! ` : ''}
+                Organize your life, one task at a time
+              </p>
             </div>
-            <button onClick={handleLogout} className="btn btn-ghost btn-sm logout-btn">
-              <span>🚪</span> Logout
-            </button>
+            <div className="header-right">
+              {currentUser && (
+                <span className="user-name">👤 {currentUser.name}</span>
+              )}
+              <button onClick={handleLogout} className="btn btn-ghost btn-sm logout-btn">
+                <span>🚪</span> Logout
+              </button>
+            </div>
           </div>
         </div>
       </header>

@@ -31,6 +31,31 @@
   flex: 1;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.user-name {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: all var(--transition-base);
+}
+
+.user-name:hover {
+  color: var(--text-primary);
+  border-color: var(--primary);
+}
+
 .header-title {
   font-size: var(--font-size-3xl);
   font-weight: 800;
@@ -249,8 +274,10 @@
     align-items: flex-start;
   }
 
-  .logout-btn {
+  .header-right {
     align-self: flex-end;
+    width: 100%;
+    justify-content: flex-end;
   }
 
   .stats-grid {

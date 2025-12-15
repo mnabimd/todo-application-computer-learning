@@ -12,17 +12,18 @@ const { checkIfRoleIsAdmin } = require('../middlewares/checkIfRoleIsAdmin');
 const router = express.Router();
 
 // ✅ CREATE
-router.post('/', createTodo);
+router.post('/', checkAuth, createTodo);
 
-router.get('/', checkAuth, checkIfRoleIsAdmin, sendTodos);
+// 📖 READ (all todos for authenticated user)
+router.get('/', checkAuth, sendTodos);
 
 // 📖 READ (single todo)
-router.get('/:id', getTodoById);
+router.get('/:id', checkAuth, getTodoById);
 
 // ✏️ UPDATE
-router.put('/:id', updateTodoById);
+router.put('/:id', checkAuth, updateTodoById);
 
 // 🗑 DELETE
-router.delete('/:id', deleteTodoById);
+router.delete('/:id', checkAuth, deleteTodoById);
 
 module.exports = router;

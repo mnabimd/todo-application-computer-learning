@@ -50,10 +50,10 @@ const fetchAPI = async (endpoint, options = {}) => {
 
 export const authAPI = {
   // Register new user
-  register: async (email, password) => {
+  register: async (email, password, name) => {
     const data = await fetchAPI('/users', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, name }),
     });
     return data;
   },
@@ -70,6 +70,11 @@ export const authAPI = {
     if (data.token) {
       localStorage.setItem('token', data.token);
     }
+
+    // Store user info
+    if (data.user) {
+      localStorage.setItem('user', JSON.stringify(data.user));
+    }
     
     return data;
   },
@@ -77,11 +82,18 @@ export const authAPI = {
   // Logout user
   logout: () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   },
 
   // Check if user is authenticated
   isAuthenticated: () => {
     return !!getAuthToken();
+  },
+
+  // Get current user info
+  getCurrentUser: () => {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
   },
 };
 

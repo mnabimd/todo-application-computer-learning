@@ -7,7 +7,11 @@ let id = 0;
 
 async function sendTodos(req, res) {
    try {
-      const [result] = await sequelize.query('SELECT * FROM todos');
+      // Get todos for the authenticated user
+      const userId = req.user.id;
+      const [result] = await sequelize.query('SELECT * FROM todos WHERE userId = :userId', {
+         replacements: { userId }
+      });
 
       res.json(result);
    } catch (error) {
@@ -20,11 +24,13 @@ async function sendTodos(req, res) {
 
 async function getTodoById(req, res) {
    try {
-      // If the ID is not a number, throw an error and tell the user that he/she must pass only a number for the ID
-
-      const [result] = await sequelize.query(`SELECT * FROM todos WHERE id = :id`, {
-         replacements: { id: req.params.id }
-      });
+      const userId = req.user.id;
+      const [result] = await sequelize.query(
+         `SELECT * FROM todos WHERE id = :id AND userId = :userId`, 
+         {
+            replacements: { id: req.params.id, userId }
+         }
+      );
 
       if (result.length === 0) {
          return res.status(404).json({ error: 'Todo not found' });
@@ -42,11 +48,15 @@ async function getTodoById(req, res) {
 async function updateTodoById(req, res) {
    try {
       const id = req.params.id;
+      const userId = req.user.id;
 
-      // Check if todo exists first
-      const [existingTodo] = await sequelize.query(`SELECT * FROM todos WHERE id = :id`, {
-         replacements: { id: id }
-      });
+      // Check if todo exists and belongs to user
+      const [existingTodo] = await sequelize.query(
+         `SELECT * FROM todos WHERE id = :id AND userId = :userId`, 
+         {
+            replacements: { id, userId }
+         }
+      );
 
       if (existingTodo.length === 0) {
          return res.status(404).json({ error: 'Todo not found' });
@@ -57,7 +67,7 @@ async function updateTodoById(req, res) {
       
       // Build update query dynamically based on what fields are provided
       const updates = [];
-      const replacements = { id: id };
+      const replacements = { id, userId };
 
       if (title !== undefined) {
          updates.push('title = :title');
@@ -75,14 +85,17 @@ async function updateTodoById(req, res) {
 
       // Perform the update
       await sequelize.query(
-         `UPDATE todos SET ${updates.join(', ')} WHERE id = :id`,
+         `UPDATE todos SET ${updates.join(', ')} WHERE id = :id AND userId = :userId`,
          { replacements }
       );
 
       // Fetch and return the updated todo
-      const [updatedTodo] = await sequelize.query(`SELECT * FROM todos WHERE id = :id`, {
-         replacements: { id: id }
-      });
+      const [updatedTodo] = await sequelize.query(
+         `SELECT * FROM todos WHERE id = :id AND userId = :userId`, 
+         {
+            replacements: { id, userId }
+         }
+      );
 
       res.json(updatedTodo[0]);
    } catch (error) {
@@ -95,41 +108,53 @@ async function updateTodoById(req, res) {
 }
 
 async function deleteTodoById(req, res) {
-   // find index of todo in Array
    const id = req.params.id;
+   const userId = req.user.id;
 
-   // delete todo by id
-
-   // find by id
-   const [result] = await sequelize.query(`SELECT * FROM todos WHERE id = :id`, {
-      replacements: { id: id }
-   });
+   // Check if todo exists and belongs to user
+   const [result] = await sequelize.query(
+      `SELECT * FROM todos WHERE id = :id AND userId = :userId`, 
+      {
+         replacements: { id, userId }
+      }
+   );
 
    if (result.length === 0) {
       return res.status(404).json({ error: 'Todo not found' });
    }
 
-   await sequelize.query(`DELETE FROM todos WHERE id = :id`, {
-      replacements: { id: id }
-   });
+   await sequelize.query(
+      `DELETE FROM todos WHERE id = :id AND userId = :userId`, 
+      {
+         replacements: { id, userId }
+      }
+   );
    res.json({ message: 'Todo deleted' });
 }
 
 async function createTodo(req, res) {
    try {
       const { title } = req.body;
+      const userId = req.user.id;
+      
       if (!title) return res.status(400).json({ error: 'Title is required' });
 
-      const newTodo = { title, completed: false, createdAt: new Date() };
+      const newTodo = { 
+         title, 
+         completed: false, 
+         createdAt: new Date(),
+         userId 
+      };
 
       // insert to database
       const [result] = await sequelize.query(
-         `INSERT INTO todos (title, completed, createdAt) VALUES (:title, :completed, :date)`,
+         `INSERT INTO todos (title, completed, createdAt, userId) VALUES (:title, :completed, :date, :userId)`,
          {
             replacements: {
                title: newTodo.title,
                completed: newTodo.completed,
-               date: newTodo.createdAt
+               date: newTodo.createdAt,
+               userId: newTodo.userId
             }
          }
       );
