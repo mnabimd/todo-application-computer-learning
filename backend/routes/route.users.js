@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const sequelize = require('../config/db');
 const jwt = require('jsonwebtoken');
 
@@ -53,7 +53,7 @@ router.post('/login', async (req, res) => {
    });
 
    // Return user info along with token
-   res.json({ 
+   res.json({
       token,
       user: {
          id: user.id,
