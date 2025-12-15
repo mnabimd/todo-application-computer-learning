@@ -1,4 +1,8 @@
-require('dotenv').config();
+// ENV Variables can be added from the Vercel Dashboard
+if (process.env.NODE_ENV !== 'production') {
+   require('dotenv').config();
+}
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
