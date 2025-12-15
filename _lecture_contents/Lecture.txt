@@ -41,6 +41,20 @@ CRUD Operations with Database
 
 
 
-~~~~~~~Current~~~~~Lecture 4:
+Lecture 4:
 Authentication
 Autorization
+
+
+Lecture 5:
+Changes in app (Backend)
+1. Host and Port added to Env Files
+2. Condition to only load the .env file if NODE is in production
+3. User has now new attribute (Full Name)
+4. Todo has now new attribute (userID)
+5. Bcrypt library is updated with Bcryptjs
+
+Frontend
+1. Frontend added (React App + Vite)
+2. Env Added For Specifing Backend server host = VITE_API_BASE_URL
+
