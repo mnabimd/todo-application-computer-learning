@@ -1,0 +1,17 @@
+// Lib Needed
+npm install express mysql2 bcrypt jsonwebtoken dotenv
+
+0. Add the Users table for the application
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('user', 'admin') DEFAULT 'user',
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+1 -> Create a route file (users)
+2 -> Create controller for it (users)
+3 -> Place login and register functions

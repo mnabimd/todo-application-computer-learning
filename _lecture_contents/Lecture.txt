@@ -9,7 +9,7 @@ Postman Introduction - Postman Collections
 _____
 
 
-~~~~~~~Current~~~~~Lecture 2 / Commmit 2: 
+Lecture 2 / Commmit 2: 
 Middleware Functions
 Global Error Throwing and Handling
 Custom error throwing and handling
@@ -38,3 +38,9 @@ Connection to databases (MongoDB, MySQL) (Sequelize)
 Raw Queries, ORM Brief Introduction
 Database Setup
 CRUD Operations with Database
+
+
+
+~~~~~~~Current~~~~~Lecture 4:
+Authentication
+Autorization

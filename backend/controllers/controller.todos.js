@@ -39,19 +39,59 @@ async function getTodoById(req, res) {
    }
 }
 
-function updateTodoById(req, res) {
-   const id = req.params.id;
+async function updateTodoById(req, res) {
+   try {
+      const id = req.params.id;
 
-   // find if todo exists
-   const todo = todos.find((t) => t.id === parseInt(id));
-   if (!todo) return res.status(404).json({ error: 'Todo not found' });
+      // Check if todo exists first
+      const [existingTodo] = await sequelize.query(`SELECT * FROM todos WHERE id = :id`, {
+         replacements: { id: id }
+      });
 
-   //    Get data from body
-   const { title, completed } = req.body;
-   if (title !== undefined) todo.title = title;
-   if (completed !== undefined) todo.completed = completed;
+      if (existingTodo.length === 0) {
+         return res.status(404).json({ error: 'Todo not found' });
+      }
 
-   res.json(todo);
+      // Get data from body
+      const { title, completed } = req.body;
+      
+      // Build update query dynamically based on what fields are provided
+      const updates = [];
+      const replacements = { id: id };
+
+      if (title !== undefined) {
+         updates.push('title = :title');
+         replacements.title = title;
+      }
+      if (completed !== undefined) {
+         updates.push('completed = :completed');
+         replacements.completed = completed;
+      }
+
+      // If no fields to update, return the existing todo
+      if (updates.length === 0) {
+         return res.json(existingTodo[0]);
+      }
+
+      // Perform the update
+      await sequelize.query(
+         `UPDATE todos SET ${updates.join(', ')} WHERE id = :id`,
+         { replacements }
+      );
+
+      // Fetch and return the updated todo
+      const [updatedTodo] = await sequelize.query(`SELECT * FROM todos WHERE id = :id`, {
+         replacements: { id: id }
+      });
+
+      res.json(updatedTodo[0]);
+   } catch (error) {
+      console.log(error);
+      res.status(500).json({
+         msg: 'Server-side error. Check later',
+         error: error
+      });
+   }
 }
 
 async function deleteTodoById(req, res) {
