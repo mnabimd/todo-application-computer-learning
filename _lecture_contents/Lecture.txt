@@ -50,7 +50,7 @@ Lecture 5:
 Changes in app (Backend)
 1. Host and Port added to Env Files
 2. Condition to only load the .env file if NODE is in production
-3. User has now new attribute (Full Name)
+3. User has now new attribute (name)
 4. Todo has now new attribute (userID)
 5. Bcrypt library is updated with Bcryptjs
 
@@ -58,3 +58,10 @@ Frontend
 1. Frontend added (React App + Vite)
 2. Env Added For Specifing Backend server host = VITE_API_BASE_URL
 
+
+Production Instruction
+DB = https://console.aiven.io/
+Backend = Render.com
+Frontend = Render.com
+
+Note: When setting up Backend and Frontend, set enviornment variables.
